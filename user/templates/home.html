@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenjani |</title>
+
+</head>
+<style>
+
+    .buttons button {
+        background-color: blueviolet;
+        cursor: pointer;
+        border: none;
+        padding: 10px;
+        color: white;
+        border-radius: 10px;
+        width: 100px;
+
+    }
+
+    .homepage {
+        background-image: linear-gradient(rgba(4, 9, 30, 0.521), rgba(160, 127, 192, 0.849), rgba(0, 0, 0, 0));
+        display: flex;
+        border-top-left-radius: 40px;
+        border-top-right-radius: 40px;
+        justify-content: space-around;
+        margin-top: 10px;
+        align-items: center;
+
+
+    }
+
+    .homepage-image img {
+        width: 700px;
+
+    }
+
+    .homepage-text {
+        width: 600px;
+
+    }
+
+    .homepage-text h1 {
+        font-size: 50px;
+    }
+
+    .homepage-text p {
+        font-size: 20px;
+
+    }
+
+    .homepage-text button {
+        font-size: 24px;
+        cursor: pointer;
+        width: 200px;
+        border: none;
+        background-color: blueviolet;
+        padding: 10px;
+        border-radius: 20px;
+    }
+</style>
+
+
+
+<body>
+    {% block content %}
+    <div>
+       {% include 'header.html' %}
+        <div class="homepage">
+            <div class="homepage-image">
+                <img src="{% static 'images/homepage-image.png'%}">
+            </div>
+
+            <div class="homepage-text">
+                <h1>Find Your Perfect Place with Hommie</h1>
+                <P>Adapt your home to your needs and make it a heaven on earth. We provide a complete service for the
+                    sale purchase or rental of real estate</P>
+                <a href=""><button>find property</button></a>
+
+            </div>
+
+
+        </div>
+
+         {% include 'footer.html' %}
+
+    </div>
+
+    {% endblock content %}
+
+
+</body>
+
+</html>

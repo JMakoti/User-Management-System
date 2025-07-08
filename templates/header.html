@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenjani |</title>
+
+</head>
+<style>
+    .header {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .logo img {
+        width: 200px;
+    }
+
+    .links {
+        display: flex;
+        list-style: none;
+    }
+
+    .links a {
+
+        text-decoration: none;
+        margin-left: 10px;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .buttons button {
+        background-color: blueviolet;
+        cursor: pointer;
+        border: none;
+        padding: 10px;
+        color: white;
+        border-radius: 10px;
+        width: 100px;
+
+    }
+</style>
+
+<body>
+    {% block content %}
+    <div>
+        <div style="display: flex; align-items: center; justify-content: center;">
+            {% include 'alerts.html' %}
+        </div>
+        <div class="header">
+            <div class="logo">
+                <h1><a href="{% url 'home' %}"><img src="{% static 'images/logo.png'%}"></a></h1>
+
+            </div>
+            {% if user.is_authenticated %}
+            <div class="links">
+                <li> <a href="">HOME</a></li>
+                <li> <a href="">ABOUT</a></li>
+                <li> <a href="">PROPERTY</a></li>
+                <li> <a href="">CONTACT</a></li>
+
+            </div>
+            <div class="buttons">
+                {{user.email}} &nbsp
+                <a href=""><button>Log Out</button></a>
+            </div>
+
+            {% else %}
+            <div class="links">
+                <li> <a href="">HOME</a></li>
+            </div>
+
+            <div class="buttons">
+                <a href="{% url 'register' %}">Register</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% endblock content %}
+
+</body>
+
+</html>
