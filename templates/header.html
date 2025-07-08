@@ -66,7 +66,7 @@
             </div>
             <div class="buttons">
                 {{user.email}} &nbsp
-                <a href=""><button>Log Out</button></a>
+                <a href="{% url 'logout' %}"><button>Log Out</button></a>
             </div>
 
             {% else %}
@@ -75,7 +75,8 @@
             </div>
 
             <div class="buttons">
-                <a href="{% url 'register' %}">Register</a>
+                <a href="{% url 'login' %}"><button>Login</button></a>
+                <a href="{% url 'register' %}"><button>Register</button></a>
             </div>
             {% endif %}
         </div>
