@@ -4,6 +4,11 @@ from django.db import models
 from .manager import CustomUserManager
 from common.models import BaseModel
 from datetime import datetime, timezone
+import uuid
+
+#Token types
+class TokenType(models.TextChoices):
+    PASSWORD_RESET = ("PASSWORD_RESET", )
 
 #creating a new user
 class User(BaseModel, AbstractBaseUser, PermissionsMixin):
@@ -23,6 +28,28 @@ class PendingUser(BaseModel):
     verification_code = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    #validate token live for 20mins
+    def is_valid(self) -> bool:
+        lifespan_in_seconds = 20 * 60
+        now = datetime.now(timezone.utc)
+        timediff = now - self.created_at
+        timediff = timediff.total_seconds()
+        if timediff > lifespan_in_seconds:
+            return False
+        return True
+    
+    
+class Token(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    token = models.CharField(max_length=255)
+    token_type = models.CharField(max_length=100, choices=TokenType.choices)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} {self.token}"
+
+    #validate token live for 20mins
     def is_valid(self) -> bool:
         lifespan_in_seconds = 20 * 60
         now = datetime.now(timezone.utc)
