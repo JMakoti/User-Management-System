@@ -9,6 +9,7 @@ from common.service import send_email
 from django.contrib.auth import get_user_model
 
 from .models import PendingUser , User , Token ,TokenType
+from .decorators import redirect_autheticated_user
 
 # Create your views here.
 
@@ -17,6 +18,7 @@ def home(request: HttpRequest):
     return render(request, "home.html")
 
 #create login
+@redirect_autheticated_user
 def login(request: HttpRequest):
     if request.method == "POST":
         email:str = request.POST.get("email")
@@ -42,6 +44,8 @@ def logout(request: HttpRequest):
     return redirect("home")
 
 #create register page
+
+@redirect_autheticated_user
 def register(request: HttpRequest):
     if request.method == "POST":
         email : str = request.POST["email"]
@@ -151,5 +155,32 @@ def verify_pass_reset_link(request: HttpRequest):
         "set_new_password_using_reset_token.html",
         context={"email": email, "token": request_token},
     )
+
+#set new password using the reset link
+def reset_password_using_link(request: HttpRequest):
+    if request.method == 'POST':
+        password1: str = request.POST.get("password1")
+        password2: str = request.POST.get("password2")
+        email: str = request.POST.get("email")
+        request_token = request.POST.get("token")
+
+        if(password1 != password2):
+            messages.error(request,"Password do not match")
+            return render(request, "set_new_password_using_reset_token.html",{"email":email ,"token": request_token},)
+        
+    token:Token = Token.objects.filter(
+        token=request_token, token_type=TokenType.PASSWORD_RESET,user__email=email,
+    ).first()
+
+    if not token or not token.is_valid():
+        messages.error(request, "Invalid or Expired Reset Link")
+        return redirect("reset_password_email")
+    
+    token.reset_user_password(password1)
+    token.delete()
+    messages.success(request, "Password changed.")
+    return redirect("login")
+    
+    
 
     
